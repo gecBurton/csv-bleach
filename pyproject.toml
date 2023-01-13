@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "csv_bleach"
 version = "0.1.0"
-description = ""
+description = "sanitize CSVs"
 authors = ["George Burton"]
 
 [tool.poetry.dependencies]

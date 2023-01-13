@@ -1,6 +1,9 @@
+build:
+	poetry build
+lint:
+	poetry run isort tests csv_bleach
+	poetry run black tests csv_bleach
+	poetry run flake8 tests csv_bleach
+
 test:
-	isort tests csv_bleach
-	black tests csv_bleach
-	flake8 tests csv_bleach
-	# mypy tests csv_bleach
-	pytest tests --cov=csv_bleach --cov-report term-missing
+	poetry run pytest tests --cov=csv_bleach --cov-report term-missing
