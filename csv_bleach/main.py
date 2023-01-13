@@ -26,8 +26,8 @@ def cli(file: str, output: Optional[str]):
     with open(file, "rb") as input_file:
         encoding = detect_encoding(input_file)  # type: ignore
 
-    with open(file, encoding=encoding) as input_file:  # type: ignore
-        row_count = count_rows(input_file)  # type: ignore
+    # with open(file, encoding=encoding) as input_file:  # type: ignore
+    #     row_count = count_rows(input_file)  # type: ignore
 
     with open(file, encoding=encoding) as input_file:  # type: ignore
         type_caster = infer_types(input_file)  # type: ignore
