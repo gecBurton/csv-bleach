@@ -1,6 +1,8 @@
-This command line tool sanitizes your CSV by:
-1. detecting its encoding and converting it to utf-8
-2. detecting its delimiter and safely converting it to a comma
+# clean your CSVs!
+
+This command line tool rationalizes CSV files by:
+1. detecting the encoding and converting it to utf-8
+2. detecting the delimiter and safely converting it to a comma
 3. casting all variables to json form, i.e. integers, floats, booleans, string or null.
 
 
