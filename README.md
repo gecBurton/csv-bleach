@@ -16,12 +16,12 @@ You will now be able to parse your CSV safely with a simple script like:
 import json
 
 
-def parse_row(text):
+def parse_row(text: str) -> list:
     return json.loads(f"[{text}]")
 
 
 with open("my-data.scsv") as f:
-    header = parse_row(next(f))
-    for row in f:
-        print(dict(zip(header, parse_row(row))))
+    header, *rows = map(parse_row, f)
+    for row in rows:
+        print(dict(zip(header, row)))
 ```
