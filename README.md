@@ -6,7 +6,10 @@ This command line tool rationalizes CSV files by:
 3. casting all variables to json form, i.e. integers, floats, booleans, string or null.
 
 
-A pypi build is not available yet so checkout the code, build it `poetry build`, and run like `poetry run bleach my-data.csv`
+A pypi build is not available yet so:
+* checkout the code 
+* build it `poetry build`
+* and run like `poetry run bleach my-data.csv`
 
 The only option is the output file name, by default it will be your original file name with `.scsv` extension.
 
