@@ -1,4 +1,4 @@
-from typing import BinaryIO
+from typing import IO
 
 
 def blocks(files, size=65536):
@@ -9,5 +9,5 @@ def blocks(files, size=65536):
         yield b
 
 
-def detect_row_count(file: BinaryIO) -> int:
+def detect_row_count(file: IO[str]) -> int:
     return sum(bl.count("\n") for bl in blocks(file))

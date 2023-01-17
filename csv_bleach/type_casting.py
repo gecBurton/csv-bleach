@@ -2,7 +2,7 @@ import json
 import logging
 from typing import Any, Iterator, TextIO
 
-from tqdm import tqdm
+import click
 
 from csv_bleach.detect_delimiter import DelimiterDetector
 from csv_bleach.line_decoder import LineSplit
@@ -60,13 +60,14 @@ class TypeCaster:
                 yield typed_row
 
     def process_file(self, input_file: TextIO, output_file: TextIO, row_count: int):
-        for row in tqdm(
-            self.parse_file(input_file),  # type: ignore
-            total=row_count,
-            desc="writing new file",
-        ):  # type: ignore
-            json_row = json.dumps(row)[1:-1] + "\n"
-            output_file.write(json_row)
+        with click.progressbar(
+            self.parse_file(input_file),
+            length=row_count,
+            label="writing new file",
+        ) as rows:
+            for row in rows:
+                json_row = json.dumps(row)[1:-1] + "\n"
+                output_file.write(json_row)
 
 
 def infer_types(rows: TextIO) -> TypeCaster:
