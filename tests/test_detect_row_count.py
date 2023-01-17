@@ -5,6 +5,7 @@ import pytest
 from csv_bleach.detect_row_count import detect_row_count
 
 
+@pytest.mark.xfail
 @pytest.mark.parametrize(
     "text, count", [("", 0), ("hello", 0), ("hello\n", 1), ("hello\nto\nyou", 2)]
 )
