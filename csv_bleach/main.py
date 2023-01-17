@@ -37,4 +37,4 @@ def cli(file: str, output: Optional[str]):
 
 
 if __name__ == "__main__":
-    cli()
+    cli()  # pragma: no cover

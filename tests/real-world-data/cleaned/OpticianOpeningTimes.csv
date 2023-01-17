@@ -1,0 +1,11 @@
+"OrganisationId", "WeekDay", "Times", "IsOpen", "OpeningTimeType", "AdditionalOpeningDate"
+35, "Sunday", "10:00-16:00", true, "General", null
+35, "Monday", "09:00-18:00", true, "General", null
+35, "Tuesday", "09:00-18:00", true, "General", null
+35, "Wednesday", "09:00-18:00", true, "General", null
+35, "Thursday", "09:00-19:00", true, "General", null
+35, "Friday", "09:00-17:30", true, "General", null
+35, "Saturday", "09:00-17:30", true, "General", null
+95, "Monday", "09:00-17:30", true, "General", null
+95, "Tuesday", "09:00-17:30", true, "General", null
+95, "Wednesday", "09:00-17:30", true, "General", null
