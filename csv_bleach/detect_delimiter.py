@@ -4,7 +4,8 @@ import collections
 import logging
 from typing import Iterator
 
-from csv_bleach.constants import NEW_LINE, QUOTE
+QUOTE = 34
+NEW_LINE = 10
 
 
 class DelimiterDetector:

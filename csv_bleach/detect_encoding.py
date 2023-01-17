@@ -4,7 +4,7 @@ from io import BytesIO
 from cchardet import UniversalDetector  # type: ignore
 
 
-def detect_encoding(rows: BytesIO):
+def detect_encoding(rows: BytesIO) -> str:
     with UniversalDetector() as detector:
         for row in rows:
             detector.feed(row)

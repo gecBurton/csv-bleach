@@ -6,6 +6,7 @@ from csv_bleach.line_decoder import LineSplit
 @pytest.mark.parametrize(
     "line, delimiter, result",
     [
+        ("", ",", []),
         (
             r'"Joan ""the bone"", Anne",Jet,"9th, at Terrace plc",Desert City,CO,00123\n',
             ",",
