@@ -9,5 +9,5 @@ def blocks(files, size=65536):
         yield b
 
 
-def count_rows(file: BinaryIO) -> int:
+def detect_row_count(file: BinaryIO) -> int:
     return sum(bl.count("\n") for bl in blocks(file))
