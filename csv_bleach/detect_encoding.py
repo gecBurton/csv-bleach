@@ -1,10 +1,10 @@
 import logging
-from io import BytesIO
+from typing import IO
 
 from cchardet import UniversalDetector  # type: ignore
 
 
-def detect_encoding(rows: BytesIO) -> str:
+def detect_encoding(rows: IO[bytes]) -> str:
     with UniversalDetector() as detector:
         for row in rows:
             detector.feed(row)

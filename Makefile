@@ -9,4 +9,4 @@ lint:
 	poetry run mypy tests csv_bleach
 
 test:
-	poetry run pytest tests --cov=csv_bleach --cov-report term-missing
+	poetry run pytest tests --cov=csv_bleach --cov-report term-missing --cov-fail-under 100
