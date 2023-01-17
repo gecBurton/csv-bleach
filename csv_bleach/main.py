@@ -24,13 +24,13 @@ def cli(file: str, output: Optional[str]):
         output = f"{filepath}.scsv"
 
     with open(file, "rb") as input_file:
-        encoding = detect_encoding(input_file)  # type: ignore
+        encoding = detect_encoding(input_file)
 
-    with open(file, encoding=encoding) as input_file:  # type: ignore
-        row_count = detect_row_count(input_file)  # type: ignore
+    with open(file, encoding=encoding) as input_file:
+        row_count = detect_row_count(input_file)
 
-    with open(file, encoding=encoding) as input_file:  # type: ignore
-        type_caster = infer_types(input_file)  # type: ignore
+    with open(file, encoding=encoding) as input_file:
+        type_caster = infer_types(input_file)
 
     with open(file, encoding=encoding) as input_file, open(output, "w") as output_file:
         type_caster.process_file(input_file, output_file, row_count)
