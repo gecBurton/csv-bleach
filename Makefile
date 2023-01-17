@@ -8,4 +8,4 @@ lint:
 	poetry run flake8 tests csv_bleach
 
 test:
-	poetry run pytest tests --cov=csv_bleach --cov-report term-missing
+	poetry run pytest tests --cov=csv_bleach --cov-report term-missing --cov-fail-under 100
