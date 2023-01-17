@@ -5,7 +5,7 @@ from typing import Optional
 import click
 
 from csv_bleach.detect_encoding import detect_encoding
-from csv_bleach.detect_rows_count import count_rows
+from csv_bleach.detect_row_count import detect_row_count
 from csv_bleach.type_casting import infer_types
 
 logging.basicConfig(level=logging.INFO)
@@ -27,7 +27,7 @@ def cli(file: str, output: Optional[str]):
         encoding = detect_encoding(input_file)  # type: ignore
 
     with open(file, encoding=encoding) as input_file:  # type: ignore
-        row_count = count_rows(input_file)  # type: ignore
+        row_count = detect_row_count(input_file)  # type: ignore
 
     with open(file, encoding=encoding) as input_file:  # type: ignore
         type_caster = infer_types(input_file)  # type: ignore

@@ -10,4 +10,4 @@ def blocks(files, size=65536):
 
 
 def detect_row_count(file: BinaryIO) -> int:
-    return sum(bl.count(b"\n") for bl in blocks(file))
+    return sum(bl.count("\n") for bl in blocks(file))
