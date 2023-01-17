@@ -5,16 +5,16 @@ name: Python package
 
 on:
   push:
-    branches: [ master, ]
+    branches: [ main, ]
   pull_request:
-    branches: [ master, ]
+    branches: [ main, ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, 3.10, 3.11]
+        python-version: ['3.10']
 
     steps:
       - uses: actions/checkout@v2

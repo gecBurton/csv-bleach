@@ -1,5 +1,7 @@
 build:
+	poetry install
 	poetry build
+
 lint:
 	poetry run isort tests csv_bleach
 	poetry run black tests csv_bleach

@@ -1,2 +1,0 @@
-QUOTE = 34
-NEW_LINE = 10
