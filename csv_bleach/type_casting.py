@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Any, Iterator, TextIO, List
+from typing import Any, Iterator, List, TextIO
 
 import click
 
