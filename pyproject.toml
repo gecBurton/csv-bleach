@@ -33,6 +33,9 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 bleach = 'csv_bleach.main:cli'
 
+[project.scripts]
+bleach = 'csv_bleach.main:cli'
+
 [tool.flake8]
 ignore = ['E501', 'W503']
 max-line-length = 88

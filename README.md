@@ -15,13 +15,12 @@ You will now be able to parse your CSV safely with a simple script like:
 
 ```python
 import json
-from typing import Iterable, IO
 
 
-def parse_row(text: str) -> list:
+def parse_row(text):
     return json.loads(f"[{text}]")
 
-def parse_file(file: IO[str]) -> Iterable[dict]:
+def parse_file(file):
     rows = map(parse_row, file)
     header = next(rows)
     for row in rows:
