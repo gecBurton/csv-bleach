@@ -6,10 +6,11 @@ from csv_bleach.detect_encoding import detect_encoding
 
 
 @pytest.mark.parametrize(
-    "text, encoding", [
+    "text, encoding",
+    [
         ("abc, 123", "ascii"),
         ("Σὲ γνωρίζω ἀπὸ τὴν κόψη", "utf-8"),
-    ]
+    ],
 )
 def test_detect_encoding(text, encoding):
     file = BytesIO(text.encode(encoding=encoding))

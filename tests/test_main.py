@@ -18,11 +18,21 @@ def test_cli():
         assert result.exit_code == 0
 
         import json
+        from typing import IO, Iterable
 
         def parse_row(text: str) -> list:
             return json.loads(f"[{text}]")
 
+        def parse_file(file: IO[str]) -> Iterable[dict]:
+            rows = map(parse_row, file)
+            header = next(rows)
+            for row in rows:
+                yield dict(zip(header, row))
+
         with open("THE_SIMPSONS.scsv") as f:
-            header, *rows = map(parse_row, f)
-            assert header == ["name", "age"]
-            assert rows == [["bart", 10], ["lisa", 8], ["maggie", 1]]
+            expected = [
+                {"age": 10, "name": "bart"},
+                {"age": 8, "name": "lisa"},
+                {"age": 1, "name": "maggie"},
+            ]
+            assert list(parse_file(f)) == expected

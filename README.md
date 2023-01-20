@@ -6,9 +6,7 @@ This command line tool cleans CSV files by:
 3. casting all variables to json form, i.e. integers, floats, booleans, string or null.
 
 
-A pypi build is not available yet so:
-* checkout the code 
-* build it `poetry build`
+* install `pip install csv-bleach`
 * and run like `poetry run bleach my-data.csv`
 
 The only option is the output file name, by default it will be your original file name with `.scsv` extension.
@@ -17,14 +15,20 @@ You will now be able to parse your CSV safely with a simple script like:
 
 ```python
 import json
+from typing import Iterable, IO
 
 
 def parse_row(text: str) -> list:
     return json.loads(f"[{text}]")
 
+def parse_file(file: IO[str]) -> Iterable[dict]:
+    rows = map(parse_row, file)
+    header = next(rows)
+    for row in rows:
+        yield dict(zip(header, row))
+
 
 with open("my-data.scsv") as f:
-    header, *rows = map(parse_row, f)
-    for row in rows:
-        print(dict(zip(header, row)))
+    for item in parse_file(f):
+        print(item)
 ```
