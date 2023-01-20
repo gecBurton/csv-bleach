@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "csv_bleach"
-version = "0.2.0"
+name = "csv-bleach"
+version = "0.2.1"
 description = "clean CSVs"
 authors = ["George Burton"]
 readme = "README.md"
@@ -31,10 +31,10 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-bleach = 'csv_bleach.__main__:cli'
+bleach = 'bleach.__main__:cli'
 
 [project.scripts]
-bleach = 'csv_bleach.__main__:cli'
+bleach = 'bleach.__main__:cli'
 
 [tool.flake8]
 ignore = ['E501', 'W503']
