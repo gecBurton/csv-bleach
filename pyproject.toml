@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "csv-bleach"
+name = "bleach"
 version = "0.2.1"
 description = "clean CSVs"
 authors = ["George Burton"]
