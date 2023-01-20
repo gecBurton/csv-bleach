@@ -2,7 +2,7 @@ from io import BytesIO
 
 import pytest
 
-from csv_bleach.detect_encoding import detect_encoding
+from bleach.detect_encoding import detect_encoding
 
 
 @pytest.mark.parametrize(
