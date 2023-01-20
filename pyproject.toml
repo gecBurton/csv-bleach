@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "csv_bleach"
-version = "0.1.3"
+version = "0.2.0"
 description = "clean CSVs"
 authors = ["George Burton"]
 readme = "README.md"
