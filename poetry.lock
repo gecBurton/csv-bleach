@@ -28,6 +28,7 @@ mypy-extensions = ">=0.4.3"
 pathspec = ">=0.9.0"
 platformdirs = ">=2"
 tomli = {version = ">=1.1.0", markers = "python_full_version < \"3.11.0a7\""}
+typing-extensions = {version = ">=3.10.0.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
@@ -36,12 +37,12 @@ jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
-name = "cchardet"
-version = "2.1.7"
-description = "cChardet is high speed universal character encoding detector."
+name = "chardet"
+version = "5.1.0"
+description = "Universal encoding detector for Python 3"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 
 [[package]]
 name = "click"
@@ -289,13 +290,13 @@ python-versions = ">=3.7"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.10"
-content-hash = "aa96fc8a4d3789e43a885ed49b8cc56ebcb2d7282fe19f77a994b81a756a7640"
+python-versions = ">=3.8.1"
+content-hash = "f9dd2b13d4a663efb042243bee8dcd2144f8c6a4851c3f71429b0d6c8869c704"
 
 [metadata.files]
 attrs = []
 black = []
-cchardet = []
+chardet = []
 click = []
 colorama = []
 coverage = []

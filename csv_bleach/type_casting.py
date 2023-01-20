@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Any, Iterator, TextIO
+from typing import Any, Iterator, TextIO, List
 
 import click
 
@@ -44,7 +44,7 @@ class TypeCaster:
         self.count = count
         assert self.count > 0
 
-    def type_cast_row(self, i: int, txt: str) -> list[Any]:
+    def type_cast_row(self, i: int, txt: str) -> List[Any]:
         words = list(map(type_cast_element, self.delimiter.split_line(txt)))
 
         assert (
