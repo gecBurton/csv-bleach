@@ -1,17 +1,17 @@
 import logging
 from typing import IO
 
-from cchardet import UniversalDetector  # type: ignore
+from chardet import UniversalDetector  # type: ignore
 
 
 def detect_encoding(rows: IO[bytes]) -> str:
-    with UniversalDetector() as detector:
-        for row in rows:
-            detector.feed(row)
-            if detector.done:
-                break
+    detector = UniversalDetector()
+    for row in rows:
+        detector.feed(row)
+        if detector.done:
+            break
 
-    encoding = detector.result["encoding"]
+    encoding = detector.result["encoding"] or "ascii"
     confidence = detector.result["confidence"] * 100
 
     logging.info(
