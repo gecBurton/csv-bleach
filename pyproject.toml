@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "bleach"
-version = "0.2.1"
+name = "csv_bleach"
+version = "0.2.3"
 description = "clean CSVs"
-authors = ["George Burton"]
+authors = ["George Burton <g.e.c.burton@gmail.com>"]
 readme = "README.md"
 license = "MIT"
 keywords = ["csv"]
@@ -10,6 +10,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Topic :: Text Processing"
 ]
+repository = "https://github.com/gecBurton/csv-bleach"
 
 [tool.poetry.dependencies]
 python = ">=3.8.1"

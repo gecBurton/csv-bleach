@@ -7,7 +7,7 @@ This command line tool cleans CSV files by:
 
 
 * install `pip install csv-bleach`
-* and run like `poetry run bleach my-data.csv`
+* and run like `python -m run csv_bleach my-data.csv`
 
 The only option is the output file name, by default it will be your original file name with `.scsv` extension.
 
