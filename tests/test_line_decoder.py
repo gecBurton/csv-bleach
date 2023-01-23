@@ -1,6 +1,6 @@
 import pytest
 
-from bleach.line_decoder import LineSplit
+from csv_bleach.line_decoder import LineSplit
 
 
 @pytest.mark.parametrize(

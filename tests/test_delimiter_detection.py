@@ -1,6 +1,6 @@
 import pytest
 
-from bleach.detect_delimiter import DelimiterDetector
+from csv_bleach.detect_delimiter import DelimiterDetector
 
 
 @pytest.mark.parametrize(

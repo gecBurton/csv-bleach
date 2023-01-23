@@ -1,6 +1,6 @@
 import pytest
 
-from bleach.type_casting import TypeCaster, type_cast_element
+from csv_bleach.type_casting import TypeCaster, type_cast_element
 
 
 @pytest.mark.parametrize(

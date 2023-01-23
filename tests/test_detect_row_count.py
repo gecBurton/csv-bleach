@@ -2,7 +2,7 @@ from io import StringIO
 
 import pytest
 
-from bleach.detect_row_count import detect_row_count
+from csv_bleach.detect_row_count import detect_row_count
 
 
 @pytest.mark.parametrize(

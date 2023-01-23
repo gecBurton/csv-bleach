@@ -4,9 +4,9 @@ from typing import Optional
 
 import click
 
-from bleach.detect_encoding import detect_encoding
-from bleach.detect_row_count import detect_row_count
-from bleach.type_casting import infer_types
+from csv_bleach.detect_encoding import detect_encoding
+from csv_bleach.detect_row_count import detect_row_count
+from csv_bleach.type_casting import infer_types
 
 logging.basicConfig(level=logging.INFO)
 
