@@ -4,8 +4,8 @@ from typing import Any, Iterator, List, TextIO
 
 import click
 
-from bleach.detect_delimiter import DelimiterDetector
-from bleach.line_decoder import LineSplit
+from csv_bleach.detect_delimiter import DelimiterDetector
+from csv_bleach.line_decoder import LineSplit
 
 LOG = logging.getLogger(__name__)
 SPECIAL = {"true": True, "false": False, "null": None, "": None, "n/a": None}
