@@ -1,9 +1,10 @@
 import json
 import logging
-from typing import Any, Iterator, List, TextIO
+from typing import Any, Iterator, List, BinaryIO, TextIO
 
 import click
 
+from charset_normalizer import from_bytes
 from csv_bleach.detect_delimiter import DelimiterDetector
 from csv_bleach.line_decoder import LineSplit
 
@@ -53,13 +54,14 @@ class TypeCaster:
 
         return words
 
-    def parse_file(self, rows: TextIO) -> Iterator[list]:
+    def parse_file(self, rows: BinaryIO) -> Iterator[list]:
         for i, row in enumerate(rows):
-            if len(row.strip()) > 0:
-                typed_row = self.type_cast_row(i, row)
+            str_row = str(from_bytes(row).best())
+            if len(str_row.strip()) > 0:
+                typed_row = self.type_cast_row(i, str_row)
                 yield typed_row
 
-    def process_file(self, input_file: TextIO, output_file: TextIO, row_count: int):
+    def process_file(self, input_file: BinaryIO, output_file: TextIO, row_count: int):
         with click.progressbar(
             self.parse_file(input_file),
             length=row_count,
@@ -70,11 +72,12 @@ class TypeCaster:
                 output_file.write(json_row)
 
 
-def infer_types(rows: TextIO) -> TypeCaster:
+def infer_types(rows: BinaryIO) -> TypeCaster:
     def _read(_rows):
         for row in _rows:
-            if len(row.strip()) > 0:
-                yield DelimiterDetector.parse_row(row)
+            str_row = str(from_bytes(row).best())
+            if len(str_row.strip()) > 0:
+                yield DelimiterDetector.parse_row(str_row)
 
     dd = DelimiterDetector.combine(_read(rows))
     assert len(dd.delimiter_count) == 1, dd.delimiter_count
