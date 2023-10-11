@@ -1,13 +1,5 @@
-from typing import IO
+from typing import BinaryIO
 
 
-def blocks(files, size=65536):
-    while True:
-        b = files.read(size)
-        if not b:
-            break
-        yield b
-
-
-def detect_row_count(file: IO[str]) -> int:
-    return sum(bl.count("\n") for bl in blocks(file))
+def detect_row_count(file: BinaryIO) -> int:
+    return sum(1 for _ in file)

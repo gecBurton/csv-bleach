@@ -1,13 +1,13 @@
 # clean your CSVs!
 
 This command line tool cleans CSV files by:
-1. detecting the encoding and converting it to utf-8
+1. converting encoding to utf-8
 2. detecting the delimiter and safely converting it to a comma
 3. casting all variables to json form, i.e. integers, floats, booleans, string or null.
 
 
 * install `pip install csv-bleach`
-* and run like `python -m run csv_bleach my-data.csv`
+* and run like `python -m csv_bleach my-data.csv`
 
 The only option is the output file name, by default it will be your original file name with `.scsv` extension.
 

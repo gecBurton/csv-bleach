@@ -6,7 +6,7 @@ from typing import Iterator
 
 QUOTE = 34
 NEW_LINE = 10
-
+CARRIAGE_RETURN = 13
 
 class DelimiterDetector:
     def __init__(self, delimiter_count: dict[str, int]):
@@ -25,7 +25,7 @@ class DelimiterDetector:
                 not escaped
                 and not char.isalnum()
                 and not (char.isspace() and prev and prev.isspace())
-                and ord(char) not in (NEW_LINE, QUOTE)
+                and ord(char) not in (NEW_LINE, QUOTE, CARRIAGE_RETURN)
             ):
                 chars.append(char)
 
