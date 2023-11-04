@@ -8,6 +8,7 @@ QUOTE = 34
 NEW_LINE = 10
 CARRIAGE_RETURN = 13
 
+
 class DelimiterDetector:
     def __init__(self, delimiter_count: dict[str, int]):
         self.delimiter_count = delimiter_count

@@ -13,9 +13,9 @@ class LineSplit:
     def split_line(self, txt: str) -> List[str]:
         if not txt:
             return []
+        split = re.findall(self.regex, txt.rstrip("\n"))
         if (
             txt[0] == ","
         ):  # nasty hack to force the regex to detect an empty initial variable
-            txt = "," + txt
-        split = re.findall(self.regex, txt.rstrip("\n"))
+            return ["", *split]
         return split

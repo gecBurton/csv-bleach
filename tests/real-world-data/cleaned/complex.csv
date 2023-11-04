@@ -1,0 +1,5 @@
+"name", "age"
+12, "george"
+null, "kevin"
+13.5, "daisy"
+"unkown", null

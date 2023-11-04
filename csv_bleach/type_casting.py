@@ -1,10 +1,10 @@
 import json
 import logging
-from typing import Any, Iterator, List, BinaryIO, TextIO
+from typing import Any, BinaryIO, Iterator, List, TextIO
 
 import click
-
 from charset_normalizer import from_bytes
+
 from csv_bleach.detect_delimiter import DelimiterDetector
 from csv_bleach.line_decoder import LineSplit
 

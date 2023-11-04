@@ -81,6 +81,7 @@ from csv_bleach.line_decoder import LineSplit
                 "",
             ],
         ),
+        (',"kevin"\n', ",", ["", '"kevin"']),
     ],
 )
 def test_split_line(line, delimiter, result):
