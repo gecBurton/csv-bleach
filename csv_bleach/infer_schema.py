@@ -1,5 +1,5 @@
 import json
-from typing import Any, Type
+from typing import Any, Dict, List, Optional, Type
 
 
 def get_bound(value):
@@ -24,7 +24,7 @@ class Schema:
         self.min[t] = min(self.min[t], m) if t in self.min else m
         self.max[t] = max(self.max[t], m) if t in self.max else m
 
-    def single(self, t: Type | None):
+    def single(self, t: Optional[Type]):
         if t == int:
             return {"type": "integer", "minimum": self.min[t], "maximum": self.max[t]}
         if t == float:
@@ -40,7 +40,7 @@ class Schema:
         return None
 
     def to_dict(self):
-        types: list[dict[str, Any]] = []
+        types: List[Dict[str, Any]] = []
         null = False
         for _type in self.type:
             if t := self.single(_type):
@@ -65,7 +65,7 @@ def parse_row(txt):
     return json.loads(f"[{txt}]")
 
 
-def get_schema_for_file(f) -> dict[str, Schema]:
+def get_schema_for_file(f) -> Dict[str, Schema]:
     header = parse_row(next(f))
     schema = {col: Schema() for col in header}
     for row in f:
