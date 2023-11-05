@@ -45,7 +45,7 @@ def test_schema(items, expected):
 
 
 def test_get_schema_for_file():
-    with open("/home/george/csv-bleach/tests/real-world-data/cleaned/complex.csv") as f:
+    with open("tests/real-world-data/cleaned/complex.csv") as f:
         schema = get_schema_for_file(f)
 
     expected = {

@@ -7,7 +7,7 @@ from typing import List
 class LineSplit:
     def __init__(self, delimiter: str):
         self.regex = re.compile(
-            f'(?:{delimiter}|\\n|^)("(?:(?:"")*(?:[^"\\\\]|\\\\.)*[^"]*)*"|[^"{delimiter}\\n]*|(?:\\n|$))'
+            f'(?:{delimiter}|\\n|^)\\s*("(?:(?:"")*(?:[^"\\\\]|\\\\.)*[^"]*)*"|[^"{delimiter}\\n]*|(?:\\s*\\n|$))'
         )
 
     def split_line(self, txt: str) -> List[str]:

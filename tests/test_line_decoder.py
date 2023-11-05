@@ -27,7 +27,7 @@ from csv_bleach.line_decoder import LineSplit
                 "Jet",
                 '"9th, at Terrace plc"',
                 "Desert\\",
-                " City",
+                "City",
                 "CO",
                 "00123\\n",
             ],
