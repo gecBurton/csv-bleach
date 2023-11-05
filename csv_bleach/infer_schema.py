@@ -58,7 +58,7 @@ class Schema:
             types[0]["type"] = [types[0]["type"], "null"]
             return types[0]
 
-        return {"oneOf": [types]}
+        return {"oneOf": types}
 
 
 def parse_row(txt):

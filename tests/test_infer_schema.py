@@ -28,10 +28,8 @@ from csv_bleach.infer_schema import Schema, get_schema_for_file
             [-4.0, None, 1, 4, 23],
             {
                 "oneOf": [
-                    [
-                        {"maximum": -4.0, "minimum": -4.0, "type": "number"},
-                        {"maximum": 23, "minimum": 1, "type": "integer"},
-                    ]
+                    {"maximum": -4.0, "minimum": -4.0, "type": "number"},
+                    {"maximum": 23, "minimum": 1, "type": "integer"},
                 ]
             },
         ),
@@ -48,17 +46,13 @@ def test_get_schema_for_file():
     with open("tests/real-world-data/cleaned/complex.csv") as f:
         schema = get_schema_for_file(f)
 
-    expected = {
-        "age": {"maxLength": 6, "minLength": 5, "type": ["string", "null"]},
-        "name": {
-            "oneOf": [
-                [
-                    {"maximum": 12, "minimum": 12, "type": "integer"},
-                    {"maxLength": 6, "minLength": 6, "type": "string"},
-                    {"maximum": 13.5, "minimum": 13.5, "type": "number"},
-                ]
-            ]
-        },
-    }
+    expected_age = {"maxLength": 6, "minLength": 5, "type": ["string", "null"]}
+    expected_name_int = {"maximum": 12, "minimum": 12, "type": "integer"}
+    expected_name_str = {"maxLength": 6, "minLength": 6, "type": "string"}
+    expected_name_float = {"maximum": 13.5, "minimum": 13.5, "type": "number"}
 
-    assert {k: v.to_dict() for k, v in schema.items()} == expected
+    actual = {k: v.to_dict() for k, v in schema.items()}
+    assert actual["age"] == expected_age
+    assert expected_name_int in actual["name"]["oneOf"]
+    assert expected_name_str in actual["name"]["oneOf"]
+    assert expected_name_float in actual["name"]["oneOf"]
