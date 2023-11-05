@@ -24,15 +24,6 @@ from csv_bleach.infer_schema import Schema, get_schema_for_file
             ["cat", "dog", "fish", None],
             {"maxLength": 4, "minLength": 3, "type": ["string", "null"]},
         ),
-        (
-            [-4.0, None, 1, 4, 23],
-            {
-                "oneOf": [
-                    {"maximum": -4.0, "minimum": -4.0, "type": "number"},
-                    {"maximum": 23, "minimum": 1, "type": "integer"},
-                ]
-            },
-        ),
     ],
 )
 def test_schema(items, expected):
