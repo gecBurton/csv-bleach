@@ -30,35 +30,35 @@ def type_cast_element(txt: str):
         except ValueError:
             pass
 
-    return clean_text.replace('""', '"')
+    return clean_text
 
 
 def split_text(text: str, delimiter: str) -> List[str]:
+    text = text.rstrip("\n").replace('""', '\\"')
+
     if not text:
         return []
 
     fields = []
     current_field = ""
-    in_quotes = False
-    escape = False
+    is_quoted = False
+    is_escaped = False
 
-    for char in text.rstrip("\n").replace('""', '"'):
-        if char == delimiter and not in_quotes:
-            if not escape:
+    for char in text:
+        if char == delimiter and not is_quoted:
+            if not is_escaped:
                 fields.append(current_field)
                 current_field = ""
             else:
                 current_field += "\\" + char
         elif char == '"':
-            if not escape:
-                in_quotes = not in_quotes
-            else:
-                current_field += "\\"  # pragma: no cover
+            if not is_escaped:
+                is_quoted = not is_quoted
             current_field += char
         elif char == "\\":
-            escape = not escape
+            is_escaped = not is_escaped
         else:
-            escape = False
+            is_escaped = False
             current_field += char
 
     fields.append(current_field)
