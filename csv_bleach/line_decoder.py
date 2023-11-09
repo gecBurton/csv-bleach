@@ -33,7 +33,7 @@ def type_cast_element(txt: str):
     return clean_text.replace('""', '"')
 
 
-def csv_parser(text: str, delimiter: str) -> List[str]:
+def split_text(text: str, delimiter: str) -> List[str]:
     if not text:
         return []
 
@@ -66,5 +66,5 @@ def csv_parser(text: str, delimiter: str) -> List[str]:
 
 
 def parse_line(text: str, delimiter: str) -> Tuple[str, int]:
-    fields = list(map(type_cast_element, csv_parser(text, delimiter)))
+    fields = list(map(type_cast_element, split_text(text, delimiter)))
     return json.dumps(fields)[1:-1], len(fields)
