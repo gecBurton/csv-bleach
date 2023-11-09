@@ -1,6 +1,6 @@
 from click.testing import CliRunner
 
-from csv_bleach.__main__ import cli
+from csv_bleach import cli
 
 THE_SIMPSONS = "name,age\nbart,10\nlisa,8\nmaggie,1"
 

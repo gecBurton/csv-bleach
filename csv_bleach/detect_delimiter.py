@@ -2,7 +2,11 @@ from __future__ import annotations
 
 import collections
 import logging
-from typing import Iterator
+from typing import BinaryIO, Iterator, Tuple
+
+from charset_normalizer import from_bytes
+
+__all__ = ["infer_delimiter"]
 
 QUOTE = 34
 NEW_LINE = 10
@@ -71,3 +75,16 @@ class DelimiterDetector:
                     log(i)
                     return current
         raise ValueError("no delimiter detected in file")
+
+
+def infer_delimiter(rows: BinaryIO) -> Tuple[str, int]:
+    def _read(_rows):
+        for row in _rows:
+            str_row = str(from_bytes(row).best())
+            if len(str_row.strip()) > 0:
+                yield DelimiterDetector.parse_row(str_row)
+
+    dd = DelimiterDetector.combine(_read(rows))
+    assert len(dd.delimiter_count) == 1, dd.delimiter_count
+    (_delimiter, _count), *_ = dd.delimiter_count.items()
+    return _delimiter, _count + 1
