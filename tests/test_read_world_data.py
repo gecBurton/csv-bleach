@@ -3,7 +3,7 @@ import os
 import pytest
 from click.testing import CliRunner
 
-from csv_bleach.__main__ import cli
+from csv_bleach.main import cli
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 INPUT_FILES = os.listdir(os.path.join(dir_path, "real-world-data", "examples"))
