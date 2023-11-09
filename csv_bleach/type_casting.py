@@ -6,7 +6,7 @@ import click
 from charset_normalizer import from_bytes
 
 from csv_bleach.detect_delimiter import DelimiterDetector
-from csv_bleach.line_decoder import LineSplit
+from csv_bleach.line_decoder import custom_parser
 
 LOG = logging.getLogger(__name__)
 SPECIAL = {"true": True, "false": False, "null": None, "": None, "n/a": None}
@@ -41,12 +41,12 @@ def type_cast_element(txt: str):
 
 class TypeCaster:
     def __init__(self, delimiter: str, count: int):
-        self.delimiter = LineSplit(delimiter)
+        self.delimiter = delimiter
         self.count = count
         assert self.count > 0
 
     def type_cast_row(self, i: int, txt: str) -> List[Any]:
-        words = list(map(type_cast_element, self.delimiter.split_line(txt)))
+        words = list(map(type_cast_element, custom_parser(txt, self.delimiter)))
 
         assert (
             len(words) == self.count

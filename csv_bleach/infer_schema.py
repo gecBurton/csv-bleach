@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 from typing import Any, Dict, List, Optional, Type
 
 
@@ -15,6 +16,7 @@ class Schema:
         self.type = set()
         self.min = {}
         self.max = {}
+        self.count = defaultdict(int)
 
     def add(self, value):
         t = type(value)
@@ -23,6 +25,12 @@ class Schema:
         m = get_bound(value)
         self.min[t] = min(self.min[t], m) if t in self.min else m
         self.max[t] = max(self.max[t], m) if t in self.max else m
+
+        if self.count is not None:
+            self.count[value] += 1
+
+    #            if len(self.count) > 10:
+    #                if len(self.count) / sum(self.count.values())
 
     def single(self, t: Optional[Type]):
         if t == int:

@@ -1,21 +1,33 @@
-"""https://gist.github.com/awwsmm/886ac0ce0cef517ad7092915f708175f
-"""
-import re
 from typing import List
 
 
-class LineSplit:
-    def __init__(self, delimiter: str):
-        self.regex = re.compile(
-            f'(?:{delimiter}|\\n|^)\\s*("(?:(?:"")*(?:[^"\\\\]|\\\\.)*[^"]*)*"|[^"{delimiter}\\n]*|(?:\\s*\\n|$))'
-        )
+def custom_parser(text: str, delimiter: str) -> List[str]:
+    if not text:
+        return []
 
-    def split_line(self, txt: str) -> List[str]:
-        if not txt:
-            return []
-        split = re.findall(self.regex, txt.rstrip("\n"))
-        if (
-            txt[0] == ","
-        ):  # nasty hack to force the regex to detect an empty initial variable
-            return ["", *split]
-        return split
+    fields = []
+    current_field = ""
+    in_quotes = False
+    escape = False
+
+    for char in text.rstrip("\n").replace('""', '"'):
+        if char == delimiter and not in_quotes:
+            if not escape:
+                fields.append(current_field)
+                current_field = ""
+            else:
+                current_field += "\\" + char
+        elif char == '"':
+            if not escape:
+                in_quotes = not in_quotes
+            else:
+                current_field += "\\"
+            current_field += char
+        elif char == "\\":
+            escape = not escape
+        else:
+            escape = False
+            current_field += char
+
+    fields.append(current_field)
+    return fields
