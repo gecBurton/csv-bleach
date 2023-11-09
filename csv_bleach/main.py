@@ -35,13 +35,7 @@ def cli(file: str, output: Optional[str]):
         with click.progressbar(input_file, length=row_count) as rows:
             for i, row in enumerate(rows):
                 utf8_str = str(from_bytes(row).best())
-                json_str, actual_count = parse_line(utf8_str, delimiter)
-
-                if actual_count != column_count:
-                    raise ValueError(  # pragma: no cover
-                        f"line: {i}, expected {column_count} got: {actual_count}, original: `{row.decode()}`"
-                    )
-
+                json_str = parse_line(utf8_str, delimiter, column_count)
                 output_file.write(json_str + "\n")
 
 

@@ -1,18 +1,14 @@
-import json
-from typing import List, Tuple
+from typing import List
+
+SPECIAL = {"true": "true", "false": "false", "null": "null", "": "null", "n/a": "null"}
 
 __all__ = ["parse_line"]
 
-SPECIAL = {"true": True, "false": False, "null": None, "": None, "n/a": None}
 
-
-def type_cast_element(txt: str):
-    clean_text = txt.strip()
+def json_encode_primitive(txt: str) -> str:
+    clean_text = txt.strip().replace('"', r"\"")
     if not clean_text:
-        return None
-
-    if clean_text[0] == '"' and clean_text[-1] == '"':
-        clean_text = clean_text[1:-1]
+        return "null"
 
     try:
         return SPECIAL[clean_text.lower()]
@@ -21,50 +17,51 @@ def type_cast_element(txt: str):
 
     if clean_text[0] != "0":
         try:
-            return int(clean_text)
+            float(clean_text)
+            return clean_text
         except ValueError:
             pass
 
-        try:
-            return float(clean_text)
-        except ValueError:
-            pass
-
-    return clean_text
+    return f'"{clean_text}"'
 
 
-def split_text(text: str, delimiter: str) -> List[str]:
+def parse_line(text: str, delimiter: str, expected_count: int) -> str:
     text = text.rstrip("\n").replace('""', '\\"')
 
     if not text:
-        return []
+        return ""
 
-    fields = []
-    current_field = ""
-    is_quoted = False
-    is_escaped = False
+    fields: List[str] = ["" for _ in range(expected_count)]
+    current_field: str = ""
+    is_quoted: bool = False
+    is_escaped: bool = False
+    i: int = 0
 
     for char in text:
         if char == delimiter and not is_quoted:
-            if not is_escaped:
-                fields.append(current_field)
-                current_field = ""
-            else:
+            if is_escaped:
                 current_field += "\\" + char
+            else:
+                fields[i] = json_encode_primitive(current_field)
+                i += 1
+                current_field = ""
         elif char == '"':
-            if not is_escaped:
+            if is_escaped:
+                current_field += char
+            else:
                 is_quoted = not is_quoted
-            current_field += char
+
         elif char == "\\":
             is_escaped = not is_escaped
         else:
             is_escaped = False
             current_field += char
 
-    fields.append(current_field)
-    return fields
+    fields[i] = json_encode_primitive(current_field)
 
+    if expected_count != i + 1:
+        raise ValueError(  # pragma: no cover
+            f"expected {expected_count} got: {i+1}, original: `{text}`"
+        )
 
-def parse_line(text: str, delimiter: str) -> Tuple[str, int]:
-    fields = list(map(type_cast_element, split_text(text, delimiter)))
-    return json.dumps(fields)[1:-1], len(fields)
+    return ", ".join(fields)
