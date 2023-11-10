@@ -20,7 +20,7 @@ def build():
     extensions = [
         Extension(
             "*",
-            ["json_encoder/*.pyx"],
+            ["csv_bleach/json_encode.pyx"],
             extra_compile_args=compile_args,
             extra_link_args=link_args,
             include_dirs=include_dirs,
