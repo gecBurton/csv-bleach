@@ -16,4 +16,7 @@ def pytest_sessionstart(session):
 
 
 def pytest_sessionfinish(session):
-    session.fib_obj.unlink()
+    try:
+        session.fib_obj.unlink()
+    except FileNotFoundError:
+        pass
