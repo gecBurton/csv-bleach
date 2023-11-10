@@ -6,7 +6,7 @@ import click
 from charset_normalizer import from_bytes
 
 from csv_bleach.detect_delimiter import infer_delimiter
-from csv_bleach.line_decoder import parse_line
+from csv_bleach.json_encode import parse_line
 
 logging.basicConfig(level=logging.INFO)
 
@@ -35,7 +35,7 @@ def cli(file: str, output: Optional[str]):
         with click.progressbar(input_file, length=row_count) as rows:
             for i, row in enumerate(rows):
                 utf8_str = str(from_bytes(row).best())
-                json_str = parse_line(utf8_str.encode(), delimiter, column_count)
+                json_str = parse_line(utf8_str.encode(), delimiter.encode(), column_count)
                 output_file.write(json_str + b"\n")
 
 
