@@ -11,8 +11,8 @@ from distutils.core import Distribution, Extension
 from Cython.Build import cythonize
 
 compile_args = ["-march=native", "-O3", "-msse", "-msse2", "-mfma", "-mfpmath=sse"]
-link_args = []
-include_dirs = []
+link_args: list = []
+include_dirs: list = []
 libraries = ["m"]
 
 

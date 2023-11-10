@@ -35,7 +35,9 @@ def cli(file: str, output: Optional[str]):
         with click.progressbar(input_file, length=row_count) as rows:
             for i, row in enumerate(rows):
                 utf8_str = str(from_bytes(row).best())
-                json_str = parse_line(utf8_str.encode(), delimiter.encode(), column_count)
+                json_str = parse_line(
+                    utf8_str.encode(), delimiter.encode(), column_count
+                )
                 output_file.write(json_str + b"\n")
 
 

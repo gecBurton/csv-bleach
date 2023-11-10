@@ -1,6 +1,6 @@
 import json
 from collections import defaultdict
-from typing import Any, Dict, List, Optional, Type
+from typing import Dict, List, Optional, Type
 
 
 def get_bound(value):
@@ -47,8 +47,8 @@ class Schema:
             }
         return None
 
-    def to_dict(self):
-        types: List[Dict[str, Any]] = []
+    def to_dict(self) -> Dict:
+        types: List = []
         null = False
         for _type in self.type:
             if t := self.single(_type):
