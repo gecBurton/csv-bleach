@@ -78,6 +78,8 @@ class DelimiterDetector:
 
 
 def infer_delimiter(rows: BinaryIO) -> Tuple[str, int]:
+    """Infers how a csv is delimited.Returns the delimiter and the number of fields."""
+
     def _read(_rows):
         for row in _rows:
             str_row = str(from_bytes(row).best())

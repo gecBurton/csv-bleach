@@ -26,11 +26,6 @@ classifiers = [
 ]
 repository = "https://github.com/gecBurton/csv-bleach"
 
-packages = [
-  {include = "csv_bleach"},
-  {include = "csv_bleach/py.typed"},
-]
-
 [tool.poetry.dependencies]
 python = ">=3.8.1"
 click = "^8.1.3"
