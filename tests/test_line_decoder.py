@@ -35,4 +35,4 @@ from csv_bleach.line_decoder import parse_line
     ],
 )
 def test_split_line(line, delimiter, expected_str, expected_count):
-    assert parse_line(line, delimiter, expected_count) == expected_str
+    assert parse_line(line.encode(), delimiter, expected_count) == expected_str.encode()
