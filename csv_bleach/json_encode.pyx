@@ -1,5 +1,4 @@
 # my_module.pyx
-from typing import List
 
 SPECIAL = {b"true": b"true", b"false": b"false", b"null": b"null", b"": b"null", b"n/a": b"null"}
 
@@ -29,7 +28,7 @@ def parse_line(text: bytes, delimiter: bytes, expected_count: int) -> bytes:
     if not text:
         return b""
 
-    fields: List[bytes] = [b"" for _ in range(expected_count)]
+    fields: list[bytes] = [b"" for _ in range(expected_count)]
     current_field: bytes = b""
     is_quoted: bool = False
     is_escaped: bool = False

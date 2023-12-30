@@ -1,6 +1,6 @@
 import json
 from collections import defaultdict
-from typing import Dict, List, Optional, Type
+from typing import Type, Optional
 
 
 def get_bound(value):
@@ -47,8 +47,8 @@ class Schema:
             }
         return None
 
-    def to_dict(self) -> Dict:
-        types: List = []
+    def to_dict(self) -> dict:
+        types: list = []
         null = False
         for _type in self.type:
             if t := self.single(_type):
@@ -73,7 +73,7 @@ def parse_row(txt):
     return json.loads(f"[{txt}]")
 
 
-def get_schema_for_file(f) -> Dict[str, Schema]:
+def get_schema_for_file(f) -> dict[str, Schema]:
     header = parse_row(next(f))
     schema = {col: Schema() for col in header}
     for row in f:

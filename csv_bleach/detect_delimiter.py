@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import collections
-from typing import BinaryIO, Iterator, Tuple
+from typing import BinaryIO, Iterator
 
 from charset_normalizer import from_bytes
 
@@ -65,7 +65,7 @@ def combine(rows: Iterator[DelimiterDetector]) -> DelimiterDetector:
     raise ValueError("no delimiter detected in file")
 
 
-def infer_delimiter(rows: BinaryIO) -> Tuple[str, int]:
+def infer_delimiter(rows: BinaryIO) -> tuple[str, int]:
     """Infers how a csv is delimited.Returns the delimiter and the number of fields."""
 
     delimiter_detectors = map(DelimiterDetector.parse_row, rows)
