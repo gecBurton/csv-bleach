@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import collections
-import logging
 from typing import BinaryIO, Iterator, Tuple
 
 from charset_normalizer import from_bytes
@@ -18,7 +17,8 @@ class DelimiterDetector:
         self.delimiter_count = delimiter_count
 
     @classmethod
-    def parse_row(cls, txt: str) -> DelimiterDetector:
+    def parse_row(cls, byte_txt: bytes) -> DelimiterDetector:
+        txt = str(from_bytes(byte_txt).best())
         escaped = False
         chars = []
         prev = None
@@ -44,47 +44,32 @@ class DelimiterDetector:
     def __eq__(self, other):
         return self.delimiter_count == other.delimiter_count
 
-    @classmethod
-    def combine(cls, rows: Iterator[DelimiterDetector]) -> DelimiterDetector:
-        def _combine(
-            left: DelimiterDetector, right: DelimiterDetector
-        ) -> DelimiterDetector:
-            intersection = {
-                key: value
-                for key, value in left.delimiter_count.items()
-                if key in right.delimiter_count
-                and left.delimiter_count[key] == right.delimiter_count[key]
-            }
-            return cls(intersection)
 
-        def log(row_number):
-            k, *_ = list(current.delimiter_count.keys())
-            logging.info(
-                f"`{k}` has been identified as the delimiter after {row_number+1} rows"
-            )
+def combine(rows: Iterator[DelimiterDetector]) -> DelimiterDetector:
+    current = next(rows)
+    for row in rows:
+        intersection = {
+            key: value
+            for key, value in current.delimiter_count.items()
+            if key in row.delimiter_count
+            and current.delimiter_count[key] == row.delimiter_count[key]
+        }
+        current = DelimiterDetector(intersection)
 
-        current = next(rows)
-        for i, row in enumerate(rows):
-            current = _combine(current, row)
-            if len(current.delimiter_count) == 1:
-                log(i)
+        if len(current.delimiter_count) == 1:
+            return current
+        if len(current.delimiter_count) == 2:
+            if " " in current.delimiter_count:
+                current.delimiter_count.pop(" ")
                 return current
-            if len(current.delimiter_count) == 2:
-                if " " in current.delimiter_count:
-                    current.delimiter_count.pop(" ")
-                    log(i)
-                    return current
-        raise ValueError("no delimiter detected in file")
+    raise ValueError("no delimiter detected in file")
 
 
 def infer_delimiter(rows: BinaryIO) -> Tuple[str, int]:
-    def _read(_rows):
-        for row in _rows:
-            str_row = str(from_bytes(row).best())
-            if len(str_row.strip()) > 0:
-                yield DelimiterDetector.parse_row(str_row)
-
-    dd = DelimiterDetector.combine(_read(rows))
-    assert len(dd.delimiter_count) == 1, dd.delimiter_count
-    (_delimiter, _count), *_ = dd.delimiter_count.items()
+    delimiter_detectors = map(DelimiterDetector.parse_row, rows)
+    delimiter_detector = combine(delimiter_detectors)
+    assert (
+        len(delimiter_detector.delimiter_count) == 1
+    ), delimiter_detector.delimiter_count
+    (_delimiter, _count), *_ = delimiter_detector.delimiter_count.items()
     return _delimiter, _count + 1
