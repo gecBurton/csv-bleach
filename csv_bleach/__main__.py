@@ -26,7 +26,7 @@ def cli(file: str, output: Optional[str]):
         output = f"{filepath}.scsv"
 
     with open(file, "rb") as input_file:
-        row_count = sum(1 for _ in input_file)
+        row_count = sum(1 for _ in iter(input_file))
 
     with open(file, "rb") as input_file:
         delimiter, column_count = infer_delimiter(input_file)
@@ -34,11 +34,12 @@ def cli(file: str, output: Optional[str]):
     with open(file, "rb") as input_file, open(output, "wb") as output_file:
         with click.progressbar(input_file, length=row_count) as rows:
             for i, row in enumerate(rows):
-                utf8_str = str(from_bytes(row).best())
-                json_str = parse_line(
-                    utf8_str.encode(), delimiter.encode(), column_count
-                )
-                output_file.write(json_str + b"\n")
+                try:
+                    utf8_str = row.decode()
+                except UnicodeError:
+                    utf8_str = str(from_bytes(row).best())
+                json_str = parse_line(utf8_str, delimiter, column_count)
+                output_file.write(json_str + "\n")
 
 
 if __name__ == "__main__":
