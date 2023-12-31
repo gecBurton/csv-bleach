@@ -1,5 +1,3 @@
-from typing import List
-
 SPECIAL = {"true": "true", "false": "false", "null": "null", "": "null", "n/a": "null"}
 
 __all__ = ["parse_line"]
@@ -31,7 +29,7 @@ def parse_line(text: str, delimiter: str, expected_count: int) -> str:
     if not text:
         return ""
 
-    fields: List[str] = ["" for _ in range(expected_count)]
+    fields: list[str] = ["" for _ in range(expected_count)]
     current_field: str = ""
     is_quoted: bool = False
     is_escaped: bool = False
