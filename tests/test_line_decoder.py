@@ -1,88 +1,32 @@
 import pytest
 
-from csv_bleach.line_decoder import LineSplit
+from csv_bleach.json_encode import parse_line
 
 
 @pytest.mark.parametrize(
-    "line, delimiter, result",
+    "line, delimiter, expected_str, expected_count",
     [
-        ("", ",", []),
+        (b"", b",", b"", 0),
         (
-            r'"Joan ""the bone"", Anne",Jet,"9th, at Terrace plc",Desert City,CO,00123\n',
-            ",",
-            [
-                '"Joan ""the bone"", Anne"',
-                "Jet",
-                '"9th, at Terrace plc"',
-                "Desert City",
-                "CO",
-                "00123\\n",
-            ],
+            b'"Joan ""the bone"", Anne",Jet,"9th, at Terrace plc",Desert City,CO,00123',
+            b",",
+            b'"Joan \\"the bone\\", Anne", "Jet", "9th, at Terrace plc", "Desert City", "CO", "00123"',
+            6,
         ),
         (
-            r'"Joan \"the bone\", Anne",Jet,"9th, at Terrace plc",Desert\, City,CO,00123\n',
-            ",",
-            [
-                '"Joan \\"the bone\\", Anne"',
-                "Jet",
-                '"9th, at Terrace plc"',
-                "Desert\\",
-                " City",
-                "CO",
-                "00123\\n",
-            ],
+            b'"Joan \\"the bone\\", Anne",Jet,"9th, at Terrace plc",Desert\\, City,CO,00123',
+            b",",
+            b'"Joan \\"the bone\\", Anne", "Jet", "9th, at Terrace plc", "Desert\\, City", "CO", "00123"',
+            6,
         ),
         (
-            r",85+,,2018-03-07 00:00:00,,150,Nothing,1,0,1,0,,27223,1,,,,\n",
-            ",",
-            [
-                "",
-                "85+",
-                "",
-                "2018-03-07 00:00:00",
-                "",
-                "150",
-                "Nothing",
-                "1",
-                "0",
-                "1",
-                "0",
-                "",
-                "27223",
-                "1",
-                "",
-                "",
-                "",
-                "\\n",
-            ],
+            b",85+,,2018-03-07 00:00:00,,150,Nothing,1,0,1,0,,27223,1,,,,",
+            b",",
+            b'null, "85+", null, "2018-03-07 00:00:00", null, 150, "Nothing", 1, "0", 1, "0", null, 27223, 1, null, null, null, null',
+            18,
         ),
-        (
-            r"17937�NAA01�Clinic�UNKNOWN�Visible�False�St Chads Clinic�St. Chads Drive���Liverpool�Merseyside�L32 8RE�53.482593536376953�-2.8844137191772461����",
-            "�",
-            [
-                "17937",
-                "NAA01",
-                "Clinic",
-                "UNKNOWN",
-                "Visible",
-                "False",
-                "St Chads Clinic",
-                "St. Chads Drive",
-                "",
-                "",
-                "Liverpool",
-                "Merseyside",
-                "L32 8RE",
-                "53.482593536376953",
-                "-2.8844137191772461",
-                "",
-                "",
-                "",
-                "",
-            ],
-        ),
+        (b',"kevin"\n', b",", b'null, "kevin"', 2),
     ],
 )
-def test_split_line(line, delimiter, result):
-    ls = LineSplit(delimiter)
-    assert ls.split_line(line) == result
+def test_split_line(line, delimiter, expected_str, expected_count):
+    assert parse_line(line, delimiter, expected_count) == expected_str
