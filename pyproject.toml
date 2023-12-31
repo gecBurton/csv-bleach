@@ -18,13 +18,10 @@ click = "^8.1.3"
 charset-normalizer = "<=3.3.0" # issue found with 3.3.1
 
 [tool.poetry.dev-dependencies]
-black = "^23.12.1"
 pytest = "^7.4.3"
-mypy = "^1.8.0"
-isort = "^5.13.2"
-flake8 = "^6.0.0"
 pytest-cov = "^4.0.0"
-Flake8-pyproject = "^1.2.2"
+ruff = "^0.1.9"
+mypy = "^1.8.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -35,7 +32,3 @@ bleach = 'bleach.__main__:cli'
 
 [project.scripts]
 bleach = 'bleach.__main__:cli'
-
-[tool.flake8]
-ignore = ['E501', 'W503']
-max-line-length = 88
