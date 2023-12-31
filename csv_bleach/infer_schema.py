@@ -48,7 +48,7 @@ class Schema:
         return None
 
     def to_dict(self):
-        types: list[dict[str, Any]] = []
+        types = []
         null = False
         for _type in self.type:
             if t := self.single(_type):
