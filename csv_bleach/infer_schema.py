@@ -1,6 +1,6 @@
 import json
 from collections import defaultdict
-from typing import Any, Optional, Type
+from typing import Optional, Type
 
 
 def get_bound(value):

@@ -6,7 +6,7 @@ lint:
 	poetry run isort tests csv_bleach
 	poetry run black tests csv_bleach
 	poetry run flake8 tests csv_bleach
-	poetry run mypy . --namespace-packages
+	poetry run mypy .
 
 test:
 	poetry run pytest tests --cov=csv_bleach --cov-report term-missing --cov-fail-under 100
