@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import collections
-import logging
 from typing import Iterator
 
 QUOTE = 34
 NEW_LINE = 10
 CARRIAGE_RETURN = 13
+
 
 class DelimiterDetector:
     def __init__(self, delimiter_count: dict[str, int]):
@@ -39,34 +39,22 @@ class DelimiterDetector:
     def __eq__(self, other):
         return self.delimiter_count == other.delimiter_count
 
-    @classmethod
-    def combine(cls, rows: Iterator[DelimiterDetector]) -> DelimiterDetector:
-        def _combine(
-            left: DelimiterDetector, right: DelimiterDetector
-        ) -> DelimiterDetector:
-            intersection = {
-                key: value
-                for key, value in left.delimiter_count.items()
-                if key in right.delimiter_count
-                and left.delimiter_count[key] == right.delimiter_count[key]
-            }
-            return cls(intersection)
 
-        def log(row_number):
-            k, *_ = list(current.delimiter_count.keys())
-            logging.info(
-                f"`{k}` has been identified as the delimiter after {row_number+1} rows"
-            )
+def combine(rows: Iterator[DelimiterDetector]) -> DelimiterDetector:
 
-        current = next(rows)
-        for i, row in enumerate(rows):
-            current = _combine(current, row)
-            if len(current.delimiter_count) == 1:
-                log(i)
+    current = next(rows)
+    for row in rows:
+        intersection = {
+            key: value
+            for key, value in current.delimiter_count.items()
+            if key in row.delimiter_count
+            and current.delimiter_count[key] == row.delimiter_count[key]
+        }
+        current = DelimiterDetector(intersection)
+        if len(current.delimiter_count) == 1:
+            return current
+        if len(current.delimiter_count) == 2:
+            if " " in current.delimiter_count:
+                current.delimiter_count.pop(" ")
                 return current
-            if len(current.delimiter_count) == 2:
-                if " " in current.delimiter_count:
-                    current.delimiter_count.pop(" ")
-                    log(i)
-                    return current
-        raise ValueError("no delimiter detected in file")
+    raise ValueError("no delimiter detected in file")

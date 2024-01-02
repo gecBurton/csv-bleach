@@ -1,6 +1,6 @@
 import pytest
 
-from csv_bleach.detect_delimiter import DelimiterDetector
+from csv_bleach.detect_delimiter import DelimiterDetector, combine
 
 
 @pytest.mark.parametrize(
@@ -37,7 +37,7 @@ def test_combine_1():
         DelimiterDetector({",": 3, ";": 2, "|": 12}),
         DelimiterDetector({",": 3, "|": 1}),
     ]
-    assert DelimiterDetector.combine(iter(items)) == DelimiterDetector({",": 3})
+    assert combine(iter(items)) == DelimiterDetector({",": 3})
 
 
 def test_combine_2():
@@ -45,7 +45,7 @@ def test_combine_2():
         DelimiterDetector({",": 3, " ": 2}),
         DelimiterDetector({",": 3, " ": 2}),
     ]
-    assert DelimiterDetector.combine(iter(items)) == DelimiterDetector({",": 3})
+    assert combine(iter(items)) == DelimiterDetector({",": 3})
 
 
 def test_combine_fail():
@@ -54,5 +54,5 @@ def test_combine_fail():
         DelimiterDetector({"|": 3}),
     ]
     with pytest.raises(ValueError) as value_error:
-        DelimiterDetector.combine(iter(items))
+        combine(iter(items))
     assert value_error.value.args == ("no delimiter detected in file",)
