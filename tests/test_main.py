@@ -10,7 +10,6 @@ def test_cli():
     runner = CliRunner()
 
     with runner.isolated_filesystem():
-
         with open("THE_SIMPSONS.csv", "w", encoding="latin") as f:
             f.write(THE_SIMPSONS)
 

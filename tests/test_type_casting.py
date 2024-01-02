@@ -1,6 +1,7 @@
 import pytest
 
-from csv_bleach.type_casting import TypeCaster, type_cast_element
+from csv_bleach.line_decoder import LineSplit
+from csv_bleach.type_casting import type_cast_element, type_cast_row
 
 
 @pytest.mark.parametrize(
@@ -31,8 +32,7 @@ from csv_bleach.type_casting import TypeCaster, type_cast_element
     ],
 )
 def test_type_cast_row(txt, expected):
-    tc = TypeCaster(delimiter=",", count=6)
-    actual = tc.type_cast_row(0, txt)
+    actual = type_cast_row(LineSplit(","), 6, 0, txt)
     assert actual == expected
 
 

@@ -1,12 +1,12 @@
 import json
 import logging
-from typing import Any, Iterator, List, BinaryIO, TextIO
+from typing import Any, List, BinaryIO, TextIO
 
 import click
 
-from charset_normalizer import from_bytes
-from csv_bleach.detect_delimiter import DelimiterDetector
+from csv_bleach.detect_delimiter import DelimiterDetector, combine
 from csv_bleach.line_decoder import LineSplit
+from csv_bleach.line_parser import binary_to_utf8
 
 LOG = logging.getLogger(__name__)
 SPECIAL = {"true": True, "false": False, "null": None, "": None, "n/a": None}
@@ -39,47 +39,36 @@ def type_cast_element(txt: str):
     return clean_text.replace('""', '"')
 
 
-class TypeCaster:
-    def __init__(self, delimiter: str, count: int):
-        self.delimiter = LineSplit(delimiter)
-        self.count = count
-        assert self.count > 0
+def type_cast_row(
+    delimiter: LineSplit, column_count: int, i: int, txt: str
+) -> List[Any]:
+    words = list(map(type_cast_element, delimiter.split_line(txt)))
 
-    def type_cast_row(self, i: int, txt: str) -> List[Any]:
-        words = list(map(type_cast_element, self.delimiter.split_line(txt)))
+    assert (
+        len(words) == column_count
+    ), f"line: {i}, expected {column_count} got: {len(words)}, original: `{txt}`, split: {words}"
 
-        assert (
-            len(words) == self.count
-        ), f"line: {i}, expected {self.count} got: {len(words)}, original: `{txt}`, split: {words}"
-
-        return words
-
-    def parse_file(self, rows: BinaryIO) -> Iterator[list]:
-        for i, row in enumerate(rows):
-            str_row = str(from_bytes(row).best())
-            if len(str_row.strip()) > 0:
-                typed_row = self.type_cast_row(i, str_row)
-                yield typed_row
-
-    def process_file(self, input_file: BinaryIO, output_file: TextIO, row_count: int):
-        with click.progressbar(
-            self.parse_file(input_file),
-            length=row_count,
-            label="writing new file",
-        ) as rows:
-            for row in rows:
-                json_row = json.dumps(row)[1:-1] + "\n"
-                output_file.write(json_row)
+    return words
 
 
-def infer_types(rows: BinaryIO) -> TypeCaster:
-    def _read(_rows):
-        for row in _rows:
-            str_row = str(from_bytes(row).best())
-            if len(str_row.strip()) > 0:
-                yield DelimiterDetector.parse_row(str_row)
+def process_file(
+    delimiter: LineSplit,
+    column_count: int,
+    input_file: BinaryIO,
+    output_file: TextIO,
+    row_count: int,
+):
+    with click.progressbar(length=row_count, label="writing new file") as bar:  # type: ignore
+        for i, row in enumerate(input_file):
+            str_row = binary_to_utf8(row)
+            typed_row = type_cast_row(delimiter, column_count, i, str_row)
+            json_row = json.dumps(typed_row)[1:-1] + "\n"
+            output_file.write(json_row)
+            bar.update(1)
 
-    dd = DelimiterDetector.combine(_read(rows))
+
+def infer_types(rows: BinaryIO) -> tuple[str, int]:
+    dd = combine(map(DelimiterDetector.parse_row, rows))
     assert len(dd.delimiter_count) == 1, dd.delimiter_count
     (_delimiter, _count), *_ = dd.delimiter_count.items()
-    return TypeCaster(delimiter=_delimiter, count=_count + 1)
+    return _delimiter, _count + 1
