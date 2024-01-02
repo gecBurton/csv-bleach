@@ -41,7 +41,6 @@ class DelimiterDetector:
 
 
 def combine(rows: Iterator[DelimiterDetector]) -> DelimiterDetector:
-
     current = next(rows)
     for row in rows:
         intersection = {

@@ -12,6 +12,13 @@ LOG = logging.getLogger(__name__)
 SPECIAL = {"true": True, "false": False, "null": None, "": None, "n/a": None}
 
 
+def binary_to_str(raw: bytes) -> str:
+    try:
+        return raw.decode()
+    except UnicodeError:
+        return str(from_bytes(raw).best())
+
+
 def type_cast_element(txt: str):
     clean_text = txt.strip()
     if not clean_text:
@@ -56,11 +63,7 @@ class TypeCaster:
 
     def parse_file(self, rows: BinaryIO) -> Iterator[list]:
         for i, row in enumerate(rows):
-            try:
-                str_row = row.decode()
-            except UnicodeError:
-                str_row = str(from_bytes(row).best())
-
+            str_row = binary_to_str(row)
             if len(str_row.strip()) > 0:
                 typed_row = self.type_cast_row(i, str_row)
                 yield typed_row
@@ -79,11 +82,11 @@ class TypeCaster:
 def infer_types(rows: BinaryIO) -> TypeCaster:
     def _read(_rows):
         for row in _rows:
-            str_row = str(from_bytes(row).best())
+            str_row = binary_to_str(row)
             if len(str_row.strip()) > 0:
                 yield DelimiterDetector.parse_row(str_row)
 
-    dd = combine(_read(rows))
+    dd = combine(_read(iter(rows)))
     assert len(dd.delimiter_count) == 1, dd.delimiter_count
     (_delimiter, _count), *_ = dd.delimiter_count.items()
     return TypeCaster(delimiter=_delimiter, count=_count + 1)
