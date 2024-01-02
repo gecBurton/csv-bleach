@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Any, Iterator, List, BinaryIO, TextIO
+from typing import Any, List, BinaryIO, TextIO
 
 import click
 
@@ -65,16 +65,6 @@ def type_cast_row(
     return words
 
 
-def parse_file(
-    delimiter: LineSplit, column_count: int, rows: BinaryIO
-) -> Iterator[list]:
-    for i, row in enumerate(rows):
-        str_row = binary_to_str(row)
-        if len(str_row.strip()) > 0:
-            typed_row = type_cast_row(delimiter, column_count, i, str_row)
-            yield typed_row
-
-
 def process_file(
     delimiter: LineSplit,
     column_count: int,
@@ -82,14 +72,13 @@ def process_file(
     output_file: TextIO,
     row_count: int,
 ):
-    with click.progressbar(
-        parse_file(delimiter, column_count, input_file),
-        length=row_count,
-        label="writing new file",
-    ) as rows:
-        for row in rows:
-            json_row = json.dumps(row)[1:-1] + "\n"
+    with click.progressbar(length=row_count, label="writing new file") as bar:  # type: ignore
+        for i, row in enumerate(input_file):
+            str_row = binary_to_str(row)
+            typed_row = type_cast_row(delimiter, column_count, i, str_row)
+            json_row = json.dumps(typed_row)[1:-1] + "\n"
             output_file.write(json_row)
+            bar.update(1)
 
 
 def infer_types(rows: BinaryIO) -> tuple[str, int]:
