@@ -52,34 +52,47 @@ class TypeCaster:
         self.count = count
         assert self.count > 0
 
-    def type_cast_row(self, i: int, txt: str) -> List[Any]:
-        words = list(map(type_cast_element, self.delimiter.split_line(txt)))
 
-        assert (
-            len(words) == self.count
-        ), f"line: {i}, expected {self.count} got: {len(words)}, original: `{txt}`, split: {words}"
+def type_cast_row(
+    delimiter: LineSplit, column_count: int, i: int, txt: str
+) -> List[Any]:
+    words = list(map(type_cast_element, delimiter.split_line(txt)))
 
-        return words
+    assert (
+        len(words) == column_count
+    ), f"line: {i}, expected {column_count} got: {len(words)}, original: `{txt}`, split: {words}"
 
-    def parse_file(self, rows: BinaryIO) -> Iterator[list]:
-        for i, row in enumerate(rows):
-            str_row = binary_to_str(row)
-            if len(str_row.strip()) > 0:
-                typed_row = self.type_cast_row(i, str_row)
-                yield typed_row
-
-    def process_file(self, input_file: BinaryIO, output_file: TextIO, row_count: int):
-        with click.progressbar(
-            self.parse_file(input_file),
-            length=row_count,
-            label="writing new file",
-        ) as rows:
-            for row in rows:
-                json_row = json.dumps(row)[1:-1] + "\n"
-                output_file.write(json_row)
+    return words
 
 
-def infer_types(rows: BinaryIO) -> TypeCaster:
+def parse_file(
+    delimiter: LineSplit, column_count: int, rows: BinaryIO
+) -> Iterator[list]:
+    for i, row in enumerate(rows):
+        str_row = binary_to_str(row)
+        if len(str_row.strip()) > 0:
+            typed_row = type_cast_row(delimiter, column_count, i, str_row)
+            yield typed_row
+
+
+def process_file(
+    delimiter: LineSplit,
+    column_count: int,
+    input_file: BinaryIO,
+    output_file: TextIO,
+    row_count: int,
+):
+    with click.progressbar(
+        parse_file(delimiter, column_count, input_file),
+        length=row_count,
+        label="writing new file",
+    ) as rows:
+        for row in rows:
+            json_row = json.dumps(row)[1:-1] + "\n"
+            output_file.write(json_row)
+
+
+def infer_types(rows: BinaryIO) -> tuple[str, int]:
     def _read(_rows):
         for row in _rows:
             str_row = binary_to_str(row)
@@ -89,4 +102,4 @@ def infer_types(rows: BinaryIO) -> TypeCaster:
     dd = combine(_read(iter(rows)))
     assert len(dd.delimiter_count) == 1, dd.delimiter_count
     (_delimiter, _count), *_ = dd.delimiter_count.items()
-    return TypeCaster(delimiter=_delimiter, count=_count + 1)
+    return _delimiter, _count + 1
