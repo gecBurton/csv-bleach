@@ -7,16 +7,16 @@ from csv_bleach.detect_delimiter import DelimiterDetector, combine
     "txt, result",
     [
         (
-            'a,b|c,e;;f g,"i"|, k',
+            b'a,b|c,e;;f g,"i"|, k',
             DelimiterDetector({" ": 2, ",": 4, ";": 2, "|": 2}),
         ),
-        ("a b c   d", DelimiterDetector({" ": 3})),
+        (b"a b c   d", DelimiterDetector({" ": 3})),
         (
-            '"Joan ""the bone"", Anne",Jet,"9th, at Terrace plc",Desert City,CO,00123',
+            b'"Joan ""the bone"", Anne",Jet,"9th, at Terrace plc",Desert City,CO,00123',
             DelimiterDetector({",": 5, " ": 1}),
         ),
         (
-            "a   b   c",
+            b"a   b   c",
             DelimiterDetector({" ": 2}),
         ),
     ],
@@ -27,7 +27,7 @@ def test_parse(txt, result):
 
 def test_parse_fails():
     with pytest.raises(ValueError) as type_error:
-        DelimiterDetector.parse_row('a, "b, c')
+        DelimiterDetector.parse_row(b'a, "b, c')
     assert type_error.value.args == ('row not escaped: `a, "b, c`',)
 
 

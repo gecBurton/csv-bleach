@@ -3,6 +3,8 @@ from __future__ import annotations
 import collections
 from typing import Iterator
 
+from csv_bleach.line_parser import binary_to_utf8
+
 QUOTE = 34
 NEW_LINE = 10
 CARRIAGE_RETURN = 13
@@ -13,7 +15,8 @@ class DelimiterDetector:
         self.delimiter_count = delimiter_count
 
     @classmethod
-    def parse_row(cls, txt: str) -> DelimiterDetector:
+    def parse_row(cls, raw: bytes) -> DelimiterDetector:
+        txt = binary_to_utf8(raw)
         escaped = False
         chars = []
         prev = None
